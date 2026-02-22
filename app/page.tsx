@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import SearchFilters from "@/components/search-filters";
 import ListingGrid from "@/components/listing-grid";
 import { Car, Bike, Wrench, MapPin, Search, FileText, MessageCircle } from "lucide-react";
@@ -113,7 +114,9 @@ export default async function Home() {
           </div>
 
           {/* Main Search */}
-          <SearchFilters showCategoryFilter={true} />
+          <Suspense fallback={<div className="card-metallic p-6 animate-pulse h-48" />}>
+            <SearchFilters showCategoryFilter={true} />
+          </Suspense>
         </div>
       </section>
 

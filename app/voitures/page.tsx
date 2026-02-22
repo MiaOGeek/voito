@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import SearchFilters from "@/components/search-filters";
 import ListingGrid from "@/components/listing-grid";
 import Pagination, { ITEMS_PER_PAGE } from "@/components/pagination";
@@ -131,7 +132,9 @@ export default async function VoituresPage({
           </div>
 
         <div className="mb-8">
-          <SearchFilters category="VOITURES" showCategoryFilter={false} />
+          <Suspense fallback={<div className="card-metallic p-6 animate-pulse h-48" />}>
+            <SearchFilters category="VOITURES" showCategoryFilter={false} />
+          </Suspense>
         </div>
 
         <div className="mb-4">
