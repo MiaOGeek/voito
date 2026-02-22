@@ -55,8 +55,8 @@ export default function ImageUpload({
       const uploadedUrls = await Promise.all(uploadPromises);
       onImagesChange([...images, ...uploadedUrls]);
       toast.success("Images uploadées avec succès");
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de l'upload");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de l'upload");
       console.error("Upload error:", error);
     } finally {
       setUploading(false);
@@ -105,7 +105,7 @@ export default function ImageUpload({
             <div key={index} className="relative aspect-video bg-muted rounded-md overflow-hidden group">
               <Image
                 src={imageUrl}
-                alt={`Image ${index + 1}`}
+                alt={`Photo de l'annonce ${index + 1} sur ${images.length}`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 25vw"

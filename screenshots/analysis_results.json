@@ -1,0 +1,238 @@
+{
+  "page_title": "Voito - Petites Annonces Automobiles Tunisie",
+  "has_content": true,
+  "body_text_length": 1741,
+  "is_404": false,
+  "h1_elements": [
+    {
+      "text": "TROUVEZ LE VÉHICULE DE VOS RÊVES",
+      "visible_above_fold": true,
+      "y_position": 129
+    }
+  ],
+  "city_section_elements": [
+    {
+      "text": "Ville",
+      "visible_above_fold": true,
+      "y_position": 467
+    },
+    {
+      "text": "Toutes villes",
+      "visible_above_fold": false,
+      "y_position": null
+    },
+    {
+      "text": "ville",
+      "visible_above_fold": false,
+      "y_position": 1176
+    },
+    {
+      "text": "Ville",
+      "visible_above_fold": true,
+      "y_position": 467
+    },
+    {
+      "text": "Toutes villes",
+      "visible_above_fold": false,
+      "y_position": null
+    },
+    {
+      "text": "ville",
+      "visible_above_fold": false,
+      "y_position": 1176
+    },
+    {
+      "text": "Toutes villes",
+      "visible_above_fold": false,
+      "y_position": null
+    }
+  ],
+  "desktop_ctas": [
+    {
+      "text": "Publier",
+      "visible_above_fold": true,
+      "y_position": 12,
+      "width": 111.1,
+      "height": 40
+    },
+    {
+      "text": "Plus de filtres",
+      "visible_above_fold": true,
+      "y_position": 338,
+      "width": 102.4,
+      "height": 20
+    },
+    {
+      "text": "Rechercher",
+      "visible_above_fold": true,
+      "y_position": 572,
+      "width": 1020.3,
+      "height": 46
+    },
+    {
+      "text": "Réinitialiser",
+      "visible_above_fold": true,
+      "y_position": 572,
+      "width": 133.7,
+      "height": 46
+    }
+  ],
+  "rechercher_desktop": [
+    {
+      "text": "Rechercher un véhicule",
+      "visible_above_fold": true,
+      "y_position": 334
+    },
+    {
+      "text": "Rechercher",
+      "visible_above_fold": true,
+      "y_position": 572
+    }
+  ],
+  "h1_mobile": [
+    {
+      "text": "TROUVEZ LE VÉHICULE DE VOS RÊVES",
+      "visible_above_fold": true,
+      "y_position": 129
+    }
+  ],
+  "rechercher_mobile": [
+    {
+      "text": "Rechercher un véhicule",
+      "visible_above_fold": true,
+      "y_position": 394,
+      "width": 206.6,
+      "height": 56
+    },
+    {
+      "text": "Rechercher",
+      "visible_above_fold": false,
+      "y_position": 838,
+      "width": 293,
+      "height": 44
+    }
+  ],
+  "hamburger_menu": [
+    {
+      "selector": "button svg",
+      "width": 24,
+      "height": 24,
+      "meets_48px_target": false,
+      "meets_44px_target": false,
+      "y_position": 20
+    },
+    {
+      "selector": "button svg",
+      "width": 13.4,
+      "height": 16,
+      "meets_48px_target": false,
+      "meets_44px_target": false,
+      "y_position": 414
+    },
+    {
+      "selector": "button svg",
+      "width": 16,
+      "height": 16,
+      "meets_48px_target": false,
+      "meets_44px_target": false,
+      "y_position": 854
+    },
+    {
+      "selector": "header button",
+      "width": 48,
+      "height": 48,
+      "meets_48px_target": true,
+      "meets_44px_target": true,
+      "y_position": 8
+    }
+  ],
+  "footer_links_mobile": [
+    {
+      "text": "voito",
+      "width": 343,
+      "height": 28,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Voitures",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Motos",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Pieces detachees",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Guide d'achat voiture",
+      "width": 343,
+      "height": 20,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Financement auto",
+      "width": 343,
+      "height": 20,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Guide d'achat moto",
+      "width": 343,
+      "height": 20,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Guide pieces detachees",
+      "width": 343,
+      "height": 20,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Qui sommes-nous ?",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Mentions Legales",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Politique de Confidentialite",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    },
+    {
+      "text": "Conditions d'utilisation",
+      "width": 343,
+      "height": 36,
+      "meets_48px_target": false,
+      "meets_44px_target": false
+    }
+  ],
+  "mobile_horizontal_scroll": false,
+  "mobile_page_width": 375,
+  "base_font_size": "16px"
+}

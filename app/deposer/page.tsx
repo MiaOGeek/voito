@@ -133,8 +133,8 @@ export default function DeposerPage() {
       const data = await response.json();
       toast.success("Annonce publiée avec succès !");
       router.push(`/annonces/${data.id}`);
-    } catch (error: any) {
-      toast.error(error.message || "Erreur lors de la publication");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la publication");
     } finally {
       setLoading(false);
     }

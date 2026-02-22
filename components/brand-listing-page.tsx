@@ -2,15 +2,19 @@ import SearchFilters from "@/components/search-filters";
 import ListingGrid from "@/components/listing-grid";
 import SeoContent from "@/components/seo-content";
 import Pagination, { ITEMS_PER_PAGE } from "@/components/pagination";
-import { ListingStatus } from "@prisma/client";
+import { ListingStatus, Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
+import { resolveImageUrl } from "@/lib/s3";
 import { slugify } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, Home } from "lucide-react";
 import { notFound } from "next/navigation";
+import { SITE_URL } from "@/lib/constants";
 
 type Category = "VOITURES" | "MOTOS" | "PIECES";
+type SearchParams = Record<string, string | string[] | undefined>;
+const p = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) || "";
 
 const categoryLabels: Record<Category, string> = {
   VOITURES: "Voitures",
@@ -24,33 +28,33 @@ const categoryPaths: Record<Category, string> = {
   PIECES: "pieces",
 };
 
-function buildWhere(searchParams: any, category: Category, brandId: string, modelId?: string) {
-  const where: any = {
+function buildWhere(searchParams: SearchParams, category: Category, brandId: string, modelId?: string) {
+  const where: Prisma.ListingWhereInput = {
     category,
     status: ListingStatus.ACTIVE,
     brandId,
   };
 
   if (modelId) where.modelId = modelId;
-  if (searchParams?.city) where.city = { contains: searchParams.city };
-  if (searchParams?.fiscalPower) where.fiscalPower = parseInt(searchParams.fiscalPower);
+  if (searchParams?.city) where.city = { contains: p(searchParams.city) };
+  if (searchParams?.fiscalPower) where.fiscalPower = parseInt(p(searchParams.fiscalPower), 10);
 
   if (searchParams?.minPrice || searchParams?.maxPrice) {
     where.price = {};
-    if (searchParams.minPrice) where.price.gte = parseFloat(searchParams.minPrice);
-    if (searchParams.maxPrice) where.price.lte = parseFloat(searchParams.maxPrice);
+    if (searchParams.minPrice) where.price.gte = parseFloat(p(searchParams.minPrice));
+    if (searchParams.maxPrice) where.price.lte = parseFloat(p(searchParams.maxPrice));
   }
 
   if (searchParams?.minYear || searchParams?.maxYear) {
     where.year = {};
-    if (searchParams.minYear) where.year.gte = parseInt(searchParams.minYear);
-    if (searchParams.maxYear) where.year.lte = parseInt(searchParams.maxYear);
+    if (searchParams.minYear) where.year.gte = parseInt(p(searchParams.minYear), 10);
+    if (searchParams.maxYear) where.year.lte = parseInt(p(searchParams.maxYear), 10);
   }
 
   if (searchParams?.minMileage || searchParams?.maxMileage) {
     where.mileage = {};
-    if (searchParams.minMileage) where.mileage.gte = parseInt(searchParams.minMileage);
-    if (searchParams.maxMileage) where.mileage.lte = parseInt(searchParams.maxMileage);
+    if (searchParams.minMileage) where.mileage.gte = parseInt(p(searchParams.minMileage), 10);
+    if (searchParams.maxMileage) where.mileage.lte = parseInt(p(searchParams.maxMileage), 10);
   }
 
   return where;
@@ -63,18 +67,19 @@ export async function BrandPage({
 }: {
   category: Category;
   brandSlug: string;
-  searchParams: any;
+  searchParams: SearchParams;
 }) {
-  const page = Math.max(1, parseInt(searchParams?.page) || 1);
+  const page = Math.max(1, parseInt(p(searchParams?.page), 10) || 1);
 
   const brand = await prisma.brand.findUnique({
     where: { slug_category: { slug: brandSlug, category } },
+    include: { models: { orderBy: { name: "asc" } } },
   });
   if (!brand) notFound();
 
   const where = buildWhere(searchParams, category, brand.id);
 
-  const [listings, totalItems] = await Promise.all([
+  const [rawListings, totalItems] = await Promise.all([
     prisma.listing.findMany({
       where,
       include: { brand: true, model: true, user: { select: { name: true } } },
@@ -85,18 +90,24 @@ export async function BrandPage({
     prisma.listing.count({ where }),
   ]);
 
+  const listings = rawListings.map((listing) => ({
+    ...listing,
+    images: (listing.images ?? []) as string[],
+    resolvedImageUrl: Array.isArray(listing.images) && listing.images[0] ? resolveImageUrl(listing.images[0] as string) : null,
+  }));
+
   const path = categoryPaths[category];
   const label = categoryLabels[category];
 
-  const baseUrl = process.env.NEXTAUTH_URL || "";
+  const baseUrl = SITE_URL;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl || undefined },
+      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl },
       { "@type": "ListItem", position: 2, name: label, item: `${baseUrl}/${path}` },
-      { "@type": "ListItem", position: 3, name: brand.name },
+      { "@type": "ListItem", position: 3, name: brand.name, item: `${baseUrl}/${path}/${brandSlug}` },
     ],
   };
 
@@ -142,6 +153,25 @@ export async function BrandPage({
             className="mb-8"
           />
 
+          {brand.models.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold text-foreground mb-3">
+                Modèles {brand.name}
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {brand.models.map((model) => (
+                  <Link
+                    key={model.id}
+                    href={`/${path}/${brandSlug}/${model.slug || slugify(model.name)}`}
+                    className="px-3 py-1.5 rounded-lg border border-border text-sm text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  >
+                    {model.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="mb-8">
             <SearchFilters category={category} showCategoryFilter={false} brandSlug={brandSlug} />
           </div>
@@ -158,7 +188,7 @@ export async function BrandPage({
             currentPage={page}
             totalItems={totalItems}
             basePath={`/${path}/${brandSlug}`}
-            searchParams={searchParams}
+            searchParams={searchParams as Record<string, string | undefined>}
           />
 
           <SeoContent
@@ -181,9 +211,9 @@ export async function BrandModelPage({
   category: Category;
   brandSlug: string;
   modelSlug: string;
-  searchParams: any;
+  searchParams: SearchParams;
 }) {
-  const page = Math.max(1, parseInt(searchParams?.page) || 1);
+  const page = Math.max(1, parseInt(p(searchParams?.page), 10) || 1);
 
   const brand = await prisma.brand.findUnique({
     where: { slug_category: { slug: brandSlug, category } },
@@ -196,7 +226,7 @@ export async function BrandModelPage({
 
   const where = buildWhere(searchParams, category, brand.id, model.id);
 
-  const [listings, totalItems] = await Promise.all([
+  const [rawListings, totalItems] = await Promise.all([
     prisma.listing.findMany({
       where,
       include: { brand: true, model: true, user: { select: { name: true } } },
@@ -207,18 +237,24 @@ export async function BrandModelPage({
     prisma.listing.count({ where }),
   ]);
 
+  const listings = rawListings.map((listing) => ({
+    ...listing,
+    images: (listing.images ?? []) as string[],
+    resolvedImageUrl: Array.isArray(listing.images) && listing.images[0] ? resolveImageUrl(listing.images[0] as string) : null,
+  }));
+
   const path = categoryPaths[category];
   const label = categoryLabels[category];
-  const baseUrl = process.env.NEXTAUTH_URL || "";
+  const baseUrl = SITE_URL;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl || undefined },
+      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl },
       { "@type": "ListItem", position: 2, name: label, item: `${baseUrl}/${path}` },
       { "@type": "ListItem", position: 3, name: brand.name, item: `${baseUrl}/${path}/${brandSlug}` },
-      { "@type": "ListItem", position: 4, name: model.name },
+      { "@type": "ListItem", position: 4, name: model.name, item: `${baseUrl}/${path}/${brandSlug}/${modelSlug}` },
     ],
   };
 
@@ -284,7 +320,7 @@ export async function BrandModelPage({
             currentPage={page}
             totalItems={totalItems}
             basePath={`/${path}/${brandSlug}/${modelSlug}`}
-            searchParams={searchParams}
+            searchParams={searchParams as Record<string, string | undefined>}
           />
 
           <SeoContent

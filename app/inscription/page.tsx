@@ -61,8 +61,8 @@ export default function InscriptionPage() {
       } else {
         router.replace("/");
       }
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de l'inscription");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de l'inscription");
     } finally {
       setLoading(false);
     }

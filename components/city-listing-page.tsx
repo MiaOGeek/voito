@@ -2,14 +2,18 @@ import SearchFilters from "@/components/search-filters";
 import ListingGrid from "@/components/listing-grid";
 import SeoContent from "@/components/seo-content";
 import Pagination, { ITEMS_PER_PAGE } from "@/components/pagination";
-import { ListingStatus } from "@prisma/client";
+import { ListingStatus, Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 import { slugify } from "@/lib/utils";
 import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight, Home, MapPin } from "lucide-react";
 import { notFound } from "next/navigation";
+import { resolveImageUrl } from "@/lib/s3";
+import { SITE_URL } from "@/lib/constants";
 
 type Category = "VOITURES" | "MOTOS" | "PIECES";
+type SearchParams = Record<string, string | string[] | undefined>;
+const p = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) || "";
 
 const categoryLabels: Record<Category, string> = {
   VOITURES: "Voitures",
@@ -30,16 +34,16 @@ export async function CityPage({
 }: {
   category: Category;
   citySlug: string;
-  searchParams: any;
+  searchParams: SearchParams;
 }) {
-  const page = Math.max(1, parseInt(searchParams?.page) || 1);
+  const page = Math.max(1, parseInt(p(searchParams?.page), 10) || 1);
 
   const city = await prisma.city.findUnique({
     where: { slug: citySlug },
   });
   if (!city) notFound();
 
-  const where: any = {
+  const where: Prisma.ListingWhereInput = {
     category,
     city: city.name,
     status: ListingStatus.ACTIVE,
@@ -50,17 +54,18 @@ export async function CityPage({
   let activeModelSlug = "";
   if (searchParams?.brandSlug) {
     const brand = await prisma.brand.findUnique({
-      where: { slug_category: { slug: searchParams.brandSlug, category } },
+      where: { slug_category: { slug: p(searchParams.brandSlug), category } },
       include: { models: true },
     });
     if (brand) {
       where.brandId = brand.id;
       activeBrandSlug = brand.slug;
       if (searchParams?.modelSlug) {
-        const model = brand.models.find((m) => slugify(m.name) === searchParams.modelSlug);
+        const ms = p(searchParams.modelSlug);
+        const model = brand.models.find((m) => slugify(m.name) === ms);
         if (model) {
           where.modelId = model.id;
-          activeModelSlug = searchParams.modelSlug;
+          activeModelSlug = ms;
         }
       }
     }
@@ -68,25 +73,25 @@ export async function CityPage({
 
   if (searchParams?.minPrice || searchParams?.maxPrice) {
     where.price = {};
-    if (searchParams.minPrice) where.price.gte = parseFloat(searchParams.minPrice);
-    if (searchParams.maxPrice) where.price.lte = parseFloat(searchParams.maxPrice);
+    if (searchParams.minPrice) where.price.gte = parseFloat(p(searchParams.minPrice));
+    if (searchParams.maxPrice) where.price.lte = parseFloat(p(searchParams.maxPrice));
   }
 
   if (searchParams?.minYear || searchParams?.maxYear) {
     where.year = {};
-    if (searchParams.minYear) where.year.gte = parseInt(searchParams.minYear);
-    if (searchParams.maxYear) where.year.lte = parseInt(searchParams.maxYear);
+    if (searchParams.minYear) where.year.gte = parseInt(p(searchParams.minYear), 10);
+    if (searchParams.maxYear) where.year.lte = parseInt(p(searchParams.maxYear), 10);
   }
 
   if (searchParams?.minMileage || searchParams?.maxMileage) {
     where.mileage = {};
-    if (searchParams.minMileage) where.mileage.gte = parseInt(searchParams.minMileage);
-    if (searchParams.maxMileage) where.mileage.lte = parseInt(searchParams.maxMileage);
+    if (searchParams.minMileage) where.mileage.gte = parseInt(p(searchParams.minMileage), 10);
+    if (searchParams.maxMileage) where.mileage.lte = parseInt(p(searchParams.maxMileage), 10);
   }
 
-  if (searchParams?.fiscalPower) where.fiscalPower = parseInt(searchParams.fiscalPower);
+  if (searchParams?.fiscalPower) where.fiscalPower = parseInt(p(searchParams.fiscalPower), 10);
 
-  const [listings, totalItems] = await Promise.all([
+  const [rawListings, totalItems] = await Promise.all([
     prisma.listing.findMany({
       where,
       include: { brand: true, model: true, user: { select: { name: true } } },
@@ -97,17 +102,23 @@ export async function CityPage({
     prisma.listing.count({ where }),
   ]);
 
+  const listings = rawListings.map((listing) => ({
+    ...listing,
+    images: (listing.images ?? []) as string[],
+    resolvedImageUrl: Array.isArray(listing.images) && listing.images[0] ? resolveImageUrl(listing.images[0] as string) : null,
+  }));
+
   const path = categoryPaths[category];
   const label = categoryLabels[category];
-  const baseUrl = process.env.NEXTAUTH_URL || "";
+  const baseUrl = SITE_URL;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl || undefined },
+      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl },
       { "@type": "ListItem", position: 2, name: label, item: `${baseUrl}/${path}` },
-      { "@type": "ListItem", position: 3, name: city.name },
+      { "@type": "ListItem", position: 3, name: city.name, item: `${baseUrl}/${path}/ville/${citySlug}` },
     ],
   };
 
@@ -131,6 +142,16 @@ export async function CityPage({
           <ChevronRight className="h-4 w-4 mx-2 text-muted-foreground/50" />
           <span className="text-foreground font-medium">{city.name}</span>
         </nav>
+
+        <div className="mb-4">
+          <Link
+            href={`/annonces-${citySlug}`}
+            className="inline-flex items-center text-sm text-primary hover:underline"
+          >
+            <MapPin className="h-4 w-4 mr-1" />
+            Toutes les annonces à {city.name}
+          </Link>
+        </div>
 
         <h1 className="text-4xl font-bold text-foreground mb-8">
           {label} à <span className="text-primary">{city.name}</span>
@@ -165,7 +186,7 @@ export async function CityPage({
           currentPage={page}
           totalItems={totalItems}
           basePath={`/${path}/ville/${citySlug}`}
-          searchParams={searchParams}
+          searchParams={searchParams as Record<string, string | undefined>}
         />
 
         <SeoContent

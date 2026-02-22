@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
+import { SITE_DOMAIN, CONTACT_EMAIL } from "@/lib/constants";
 
 export const metadata = {
   title: "Politique de Confidentialite | Voito",
+  description: "Politique de confidentialité de Voito — découvrez comment nous collectons, utilisons et protégeons vos données personnelles sur notre plateforme d'annonces auto en Tunisie.",
 };
 
 export default function ConfidentialitePage() {
@@ -28,11 +30,11 @@ export default function ConfidentialitePage() {
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Responsable du traitement</h2>
           <p>
-            Le responsable du traitement des donnees personnelles est <strong className="text-foreground">Voito</strong>, plateforme de petites annonces automobiles accessible a l'adresse <strong className="text-foreground">voito.tn</strong>.
+            Le responsable du traitement des donnees personnelles est <strong className="text-foreground">Voito</strong>, plateforme de petites annonces automobiles accessible a l'adresse <strong className="text-foreground">{SITE_DOMAIN}</strong>.
           </p>
           <p>
             Pour toute question relative a vos donnees personnelles :{" "}
-            <a href="mailto:contact@voito.tn" className="text-primary hover:underline">contact@voito.tn</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:underline">{CONTACT_EMAIL}</a>
           </p>
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Base legale du traitement</h2>
@@ -127,7 +129,7 @@ export default function ConfidentialitePage() {
           </ul>
           <p>
             Pour exercer ces droits, contactez-nous a{" "}
-            <a href="mailto:contact@voito.tn" className="text-primary hover:underline">contact@voito.tn</a>. Nous nous engageons a repondre a votre demande dans un delai de 30 jours.
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:underline">{CONTACT_EMAIL}</a>. Nous nous engageons a repondre a votre demande dans un delai de 30 jours.
           </p>
           <p>
             Vous disposez egalement du droit d'introduire une reclamation aupres d'une autorite de controle competente (CNIL en France, INPDP en Tunisie).

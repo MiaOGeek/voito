@@ -11,7 +11,7 @@ export async function GET() {
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: (session.user as any).id },
+    where: { id: session.user.id },
     select: {
       id: true,
       name: true,
@@ -40,7 +40,7 @@ export async function PATCH(request: Request) {
   const body = await request.json();
   const { name, phone, image } = body;
 
-  const updateData: any = {};
+  const updateData: { name?: string; phone?: string | null; image?: string | null } = {};
 
   if (name !== undefined) {
     if (!name || name.trim().length < 2) {
@@ -61,7 +61,7 @@ export async function PATCH(request: Request) {
   }
 
   const user = await prisma.user.update({
-    where: { id: (session.user as any).id },
+    where: { id: session.user.id },
     data: updateData,
     select: {
       id: true,

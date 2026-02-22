@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Home, Search, Car, Bike, Wrench } from "lucide-react";
 
+export const metadata = {
+  title: "Page introuvable | Voito",
+  description: "La page que vous recherchez n'existe pas ou a été déplacée. Retrouvez des milliers d'annonces de voitures, motos et pièces d'occasion sur Voito.",
+  robots: { index: false, follow: true },
+};
+
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center py-16">

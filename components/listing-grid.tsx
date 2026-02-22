@@ -1,10 +1,20 @@
-"use client";
-
 import ListingCard from "./listing-card";
 import { AlertCircle } from "lucide-react";
 
 interface ListingGridProps {
-  listings: any[];
+  listings: {
+    id: string;
+    title: string;
+    price: number;
+    year?: number | null;
+    mileage?: number | null;
+    fiscalPower?: number | null;
+    city: string;
+    brand?: { name: string } | null;
+    model?: { name: string } | null;
+    fuelType?: string | null;
+    resolvedImageUrl?: string | null;
+  }[];
 }
 
 export default function ListingGrid({ listings }: ListingGridProps) {

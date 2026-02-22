@@ -2,6 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid hsl(var(--border));
+  text-align: left;
+}
+
+.comparison-table th {
+  background: hsl(var(--muted) / 0.5);
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.comparison-table td {
+  color: hsl(var(--muted-foreground));
+}
+
+.comparison-table tr:hover td {
+  background: hsl(var(--muted) / 0.2);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @layer base {
   :root {
     --background: 240 10% 3.9%;
@@ -46,7 +102,7 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url("https://www.transparenttextures.com/patterns/brushed-alum.png");
+    background-image: url("/patterns/brushed-alum.png");
     opacity: 0.05;
     pointer-events: none;
   }

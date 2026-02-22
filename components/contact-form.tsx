@@ -36,8 +36,8 @@ export default function ContactForm({ listingId }: ContactFormProps) {
 
       toast.success("Message envoyé avec succès !");
       setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de l'envoi du message");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de l'envoi du message");
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { Category, FuelType, Transmission, ListingStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { Category, FuelType, Transmission, ListingStatus, Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/db";
@@ -21,10 +22,10 @@ export async function GET(request: Request) {
     const minMileage = searchParams.get("minMileage");
     const maxMileage = searchParams.get("maxMileage");
     const fiscalPower = searchParams.get("fiscalPower");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "12");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1") || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "12") || 12));
 
-    const where: any = {
+    const where: Prisma.ListingWhereInput = {
       status: ListingStatus.ACTIVE,
     };
 
@@ -181,6 +182,11 @@ export async function POST(request: Request) {
         },
       },
     });
+
+    revalidatePath("/voitures");
+    revalidatePath("/motos");
+    revalidatePath("/pieces");
+    revalidatePath("/sitemap.xml");
 
     return NextResponse.json(listing, { status: 201 });
   } catch (error) {

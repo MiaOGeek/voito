@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { Category, FuelType, Transmission } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
@@ -70,7 +71,7 @@ export async function PATCH(
       );
     }
 
-    if (listing.userId !== (session.user as any).id) {
+    if (listing.userId !== session.user.id) {
       return NextResponse.json(
         { error: "Non autorisé" },
         { status: 403 }
@@ -119,6 +120,11 @@ export async function PATCH(
       },
     });
 
+    revalidatePath(`/annonces/${params.id}`);
+    revalidatePath("/voitures");
+    revalidatePath("/motos");
+    revalidatePath("/pieces");
+
     return NextResponse.json(updatedListing);
   } catch (error) {
     console.error("Update listing error:", error);
@@ -154,7 +160,7 @@ export async function DELETE(
       );
     }
 
-    if (listing.userId !== (session.user as any).id) {
+    if (listing.userId !== session.user.id) {
       return NextResponse.json(
         { error: "Non autorisé" },
         { status: 403 }
@@ -172,6 +178,12 @@ export async function DELETE(
     await prisma.listing.delete({
       where: { id: params.id },
     });
+
+    revalidatePath(`/annonces/${params.id}`);
+    revalidatePath("/voitures");
+    revalidatePath("/motos");
+    revalidatePath("/pieces");
+    revalidatePath("/sitemap.xml");
 
     return NextResponse.json({ success: true });
   } catch (error) {

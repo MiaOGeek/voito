@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Car, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import { getSiteConfig } from "@/lib/site-config";
+import GuideLinks from "@/components/guide-links";
 
 export default async function Footer() {
   const config = await getSiteConfig();
@@ -33,7 +34,7 @@ export default async function Footer() {
   return (
     <footer className="metallic-bg border-t border-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* Logo & description */}
           <div className="space-y-3">
             <Link href="/" className="flex items-center space-x-2 group">
@@ -67,33 +68,38 @@ export default async function Footer() {
           <div>
             <h3 className="font-semibold text-foreground mb-3">Categories</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/voitures" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/voitures" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Voitures
               </Link>
-              <Link href="/motos" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/motos" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Motos
               </Link>
-              <Link href="/pieces" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/pieces" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Pieces detachees
               </Link>
             </nav>
           </div>
 
+          <GuideLinks />
+
           {/* Informations legales */}
           <div>
             <h3 className="font-semibold text-foreground mb-3">Informations legales</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/qui-sommes-nous" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/qui-sommes-nous" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Qui sommes-nous ?
               </Link>
-              <Link href="/mentions-legales" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/mentions-legales" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Mentions Legales
               </Link>
-              <Link href="/confidentialite" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/confidentialite" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Politique de Confidentialite
               </Link>
-              <Link href="/conditions" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link href="/conditions" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
                 Conditions d'utilisation
+              </Link>
+              <Link href="/faq" className="text-muted-foreground hover:text-primary transition-colors text-sm py-2">
+                Questions fréquentes
               </Link>
             </nav>
           </div>

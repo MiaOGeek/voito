@@ -3,7 +3,7 @@
 ## Decisions prises
 
 - **Projet separe** : `E:/fakeclaudecode/voito-admin/` (Next.js independant, deployable sur un autre serveur)
-- **Meme BDD** : se connecte a la meme base TiDB Cloud MySQL que voito.tn
+- **Meme BDD** : se connecte a la meme base TiDB Cloud MySQL que voito.info
 - **Stack UI** : Next.js 14 + Tailwind + shadcn/ui + Recharts (meme stack que le site)
 - **Auth** : table `Admin` separee dans le schema Prisma (independant des Users du site)
 
@@ -49,7 +49,7 @@ model Listing {
 ```
 
 - Migration : `prisma migrate dev` (ajoute table Admin + champs SEO sur Brand, City, Listing)
-- Seed : creer un admin par defaut (`admin@voito.tn`)
+- Seed : creer un admin par defaut (`admin@voito.info`)
 
 ### 1.3 - Auth admin standalone
 
@@ -98,7 +98,7 @@ Structure globale :
   - Modeles
   - Villes
   - Parametres
-- **Header** : breadcrumb dynamique, nom admin, bouton deconnexion, lien vers voito.tn
+- **Header** : breadcrumb dynamique, nom admin, bouton deconnexion, lien vers voito.info
 - **Responsive** : sidebar en sheet/drawer sur mobile
 - **Theme** : dark industriel (reprendre les CSS vars de voito)
 
@@ -569,7 +569,7 @@ voito-admin/
 ```env
 DATABASE_URL=mysql://...           # Meme URL que voito
 JWT_SECRET=...                     # Secret pour signer les tokens admin
-NEXT_PUBLIC_SITE_URL=https://voito.tn  # Lien retour vers le site
+NEXT_PUBLIC_SITE_URL=https://voito.info  # Lien retour vers le site
 ```
 
 ---
@@ -600,6 +600,6 @@ Etapes 6-7-8 sont quasi identiques (meme composant DataTable, juste le filtre ca
 
 ---
 
-## Ce qu'on ne touche PAS sur voito.tn
+## Ce qu'on ne touche PAS sur voito.info
 
 Le site principal reste intact. On ajoute seulement la table `Admin` dans la BDD partagee. Aucune modification du code de voito/.

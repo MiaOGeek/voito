@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import prisma from "@/lib/db";
 import { slugify } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -20,8 +20,6 @@ export async function generateMetadata({
   const model = brand.models.find((m) => slugify(m.name) === params.model);
   if (!model) return {};
 
-  const baseUrl = process.env.NEXTAUTH_URL || "";
-
   const title = model.metaTitle || `Pièces ${brand.name} ${model.name} en Tunisie | Voito`;
   const description = model.metaDesc || `Trouvez des pièces détachées ${brand.name} ${model.name} en Tunisie sur Voito.`;
   const ogImage = model.logo || brand.logo;
@@ -30,7 +28,7 @@ export async function generateMetadata({
     title,
     description,
     robots: { index: model.indexable, follow: model.indexable },
-    alternates: { canonical: `${baseUrl}/pieces/${params.brand}/${params.model}` },
+    alternates: { canonical: `/pieces/${params.brand}/${params.model}` },
     openGraph: {
       title,
       description,
@@ -44,7 +42,7 @@ export default async function PiecesBrandModelPage({
   searchParams,
 }: {
   params: { brand: string; model: string };
-  searchParams: any;
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
   return (
     <BrandModelPage

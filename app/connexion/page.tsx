@@ -32,8 +32,8 @@ export default function ConnexionPage() {
         toast.success("Connexion réussie !");
         router.replace("/");
       }
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de la connexion");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la connexion");
     } finally {
       setLoading(false);
     }

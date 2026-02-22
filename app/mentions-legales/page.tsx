@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
+import { SITE_DOMAIN, CONTACT_EMAIL } from "@/lib/constants";
 
 export const metadata = {
   title: "Mentions Legales | Voito",
+  description: "Mentions légales du site Voito — informations sur l'éditeur, l'hébergeur et les conditions d'utilisation de la plateforme de petites annonces automobiles en Tunisie.",
 };
 
 export default function MentionsLegalesPage() {
@@ -24,7 +26,7 @@ export default function MentionsLegalesPage() {
         <div className="card-metallic p-8 space-y-6 text-muted-foreground leading-relaxed">
           <h2 className="text-2xl font-bold text-foreground">Editeur du site</h2>
           <p>
-            Le site <strong className="text-foreground">voito.tn</strong> est edite par Voito, plateforme de petites annonces automobiles en Tunisie.
+            Le site <strong className="text-foreground">{SITE_DOMAIN}</strong> est edite par Voito, plateforme de petites annonces automobiles en Tunisie.
           </p>
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Hebergement</h2>
@@ -34,7 +36,7 @@ export default function MentionsLegalesPage() {
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Propriete intellectuelle</h2>
           <p>
-            L'ensemble des contenus (textes, images, logos, elements graphiques) presents sur le site voito.tn sont proteges par le droit d'auteur. Toute reproduction, meme partielle, est interdite sans autorisation prealable.
+            L'ensemble des contenus (textes, images, logos, elements graphiques) presents sur le site {SITE_DOMAIN} sont proteges par le droit d'auteur. Toute reproduction, meme partielle, est interdite sans autorisation prealable.
           </p>
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Responsabilite</h2>
@@ -45,7 +47,7 @@ export default function MentionsLegalesPage() {
           <h2 className="text-2xl font-bold text-foreground pt-4">Contact</h2>
           <p>
             Pour toute question relative aux mentions legales :{" "}
-            <a href="mailto:contact@voito.tn" className="text-primary hover:underline">contact@voito.tn</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:underline">{CONTACT_EMAIL}</a>
           </p>
         </div>
       </div>

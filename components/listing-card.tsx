@@ -1,11 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Gauge, MapPin, Fuel } from "lucide-react";
-import { motion } from "framer-motion";
-import { getFileUrl } from "@/lib/s3";
-import { useState, useEffect } from "react";
 
 interface ListingCardProps {
   listing: {
@@ -16,30 +11,21 @@ interface ListingCardProps {
     mileage?: number | null;
     fiscalPower?: number | null;
     city: string;
-    images: string[];
     brand?: { name: string } | null;
     model?: { name: string } | null;
     fuelType?: string | null;
+    resolvedImageUrl?: string | null;
   };
   index?: number;
 }
 
 export default function ListingCard({ listing, index = 0 }: ListingCardProps) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (listing.images && listing.images.length > 0) {
-      getFileUrl(listing.images[0], true)
-        .then((url) => setImageUrl(url))
-        .catch((error) => console.error("Error getting image URL:", error));
-    }
-  }, [listing.images]);
+  const imageUrl = listing.resolvedImageUrl ?? null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
+    <div
+      className="animate-fade-in-up"
+      style={{ animationDelay: `${index * 100}ms` }}
     >
       <Link href={`/annonces/${listing.id}`}>
         <div className="card-metallic group cursor-pointer">
@@ -101,6 +87,6 @@ export default function ListingCard({ listing, index = 0 }: ListingCardProps) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

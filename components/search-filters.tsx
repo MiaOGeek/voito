@@ -168,10 +168,11 @@ export default function SearchFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {showCategoryFilter && (
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-category" className="block text-sm font-medium text-muted-foreground mb-2">
               Catégorie
             </label>
             <select
+              id="filter-category"
               value={filters.category}
               onChange={(e) => setFilters({ ...filters, category: e.target.value })}
               className="input-industrial"
@@ -185,10 +186,11 @@ export default function SearchFilters({
         )}
 
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-2">
+          <label htmlFor="filter-brand" className="block text-sm font-medium text-muted-foreground mb-2">
             Marque
           </label>
           <select
+            id="filter-brand"
             value={filters.brandSlug}
             onChange={(e) => setFilters({ ...filters, brandSlug: e.target.value, modelSlug: "" })}
             className="input-industrial"
@@ -203,10 +205,11 @@ export default function SearchFilters({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-2">
+          <label htmlFor="filter-model" className="block text-sm font-medium text-muted-foreground mb-2">
             Modèle
           </label>
           <select
+            id="filter-model"
             value={filters.modelSlug}
             onChange={(e) => setFilters({ ...filters, modelSlug: e.target.value })}
             className="input-industrial"
@@ -222,10 +225,11 @@ export default function SearchFilters({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-2">
+          <label htmlFor="filter-city" className="block text-sm font-medium text-muted-foreground mb-2">
             Ville
           </label>
           <select
+            id="filter-city"
             value={filters.city}
             onChange={(e) => setFilters({ ...filters, city: e.target.value })}
             className="input-industrial"
@@ -243,10 +247,11 @@ export default function SearchFilters({
       {showAdvanced && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-border">
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-min-price" className="block text-sm font-medium text-muted-foreground mb-2">
               Prix min (TND)
             </label>
             <input
+              id="filter-min-price"
               type="number"
               value={filters.minPrice}
               onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
@@ -256,10 +261,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-max-price" className="block text-sm font-medium text-muted-foreground mb-2">
               Prix max (TND)
             </label>
             <input
+              id="filter-max-price"
               type="number"
               value={filters.maxPrice}
               onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
@@ -269,10 +275,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-min-year" className="block text-sm font-medium text-muted-foreground mb-2">
               Année min
             </label>
             <select
+              id="filter-min-year"
               value={filters.minYear}
               onChange={(e) => setFilters({ ...filters, minYear: e.target.value })}
               className="input-industrial"
@@ -287,10 +294,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-max-year" className="block text-sm font-medium text-muted-foreground mb-2">
               Année max
             </label>
             <select
+              id="filter-max-year"
               value={filters.maxYear}
               onChange={(e) => setFilters({ ...filters, maxYear: e.target.value })}
               className="input-industrial"
@@ -305,10 +313,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-min-mileage" className="block text-sm font-medium text-muted-foreground mb-2">
               Kilométrage min
             </label>
             <input
+              id="filter-min-mileage"
               type="number"
               value={filters.minMileage}
               onChange={(e) => setFilters({ ...filters, minMileage: e.target.value })}
@@ -318,10 +327,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-max-mileage" className="block text-sm font-medium text-muted-foreground mb-2">
               Kilométrage max
             </label>
             <input
+              id="filter-max-mileage"
               type="number"
               value={filters.maxMileage}
               onChange={(e) => setFilters({ ...filters, maxMileage: e.target.value })}
@@ -331,10 +341,11 @@ export default function SearchFilters({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
+            <label htmlFor="filter-fiscal-power" className="block text-sm font-medium text-muted-foreground mb-2">
               Puissance fiscale (CV)
             </label>
             <input
+              id="filter-fiscal-power"
               type="number"
               value={filters.fiscalPower}
               onChange={(e) => setFilters({ ...filters, fiscalPower: e.target.value })}

@@ -1,0 +1,40 @@
+# Voito — Petites Annonces Automobiles en Tunisie
+
+> Voito est la plateforme de reference pour l'achat et la vente de vehicules d'occasion en Tunisie. Le site propose des annonces de voitures, motos et pieces detachees couvrant les 24 gouvernorats du pays, avec des prix en dinars tunisiens (TND).
+
+## Categories principales
+
+- [Voitures d'occasion](https://voito.info/voitures): Milliers d'annonces de voitures d'occasion en Tunisie — toutes marques, tous budgets.
+- [Motos d'occasion](https://voito.info/motos): Scooters, sportives, trails et customs — annonces de motos dans toute la Tunisie.
+- [Pieces detachees](https://voito.info/pieces): Pieces auto et moto neuves et d'occasion — moteurs, freins, carrosserie, electricite.
+
+## Pages utiles
+
+- [Accueil](https://voito.info/): Page d'accueil avec recherche, categories et annonces recentes.
+- [FAQ](https://voito.info/faq): Questions frequentes sur l'achat, la vente et l'utilisation de Voito.
+- [Qui sommes-nous](https://voito.info/qui-sommes-nous): Presentation de l'equipe et de la mission de Voito.
+- [Blog](https://voito.info/blog): Guides d'achat, comparatifs et classements automobiles.
+- [Publier une annonce](https://voito.info/deposer): Publication gratuite d'annonces de vehicules et pieces.
+
+## Marques populaires
+
+- [Voitures par marque](https://voito.info/voitures/marques): Volkswagen, Peugeot, Renault, Toyota, BMW, Hyundai, Kia, Fiat, Mercedes-Benz, Citroen, Dacia, Seat, Audi.
+- [Motos par marque](https://voito.info/motos/marques): Yamaha, Honda, Suzuki, Kawasaki, BMW, KTM, Piaggio, SYM, Kymco.
+- [Pieces par marque](https://voito.info/pieces/marques): Pieces compatibles avec toutes les marques populaires en Tunisie.
+
+## Villes couvertes
+
+- [Voitures par ville](https://voito.info/voitures/villes): Annonces dans toutes les villes — Tunis, Sfax, Sousse, Nabeul, Bizerte, Gabes, Kairouan, Monastir et plus.
+- [Motos par ville](https://voito.info/motos/villes): Motos disponibles par gouvernorat.
+- [Pieces par ville](https://voito.info/pieces/villes): Pieces detachees par region.
+
+## Faits cles
+
+- Publication d'annonces 100% gratuite
+- Prix affiches en dinars tunisiens (TND)
+- Couverture nationale : 24 gouvernorats
+- Contact direct vendeur via messagerie ou WhatsApp
+- Categories : voitures, motos, pieces detachees
+- Langue du site : francais
+- Pays : Tunisie
+- Contact : contact@voito.info

@@ -12,7 +12,23 @@ import DashboardSidebar from "@/components/dashboard-sidebar";
 export default function MesAnnoncesPage() {
   const { data: session, status } = useSession() || {};
   const router = useRouter();
-  const [listings, setListings] = useState<any[]>([]);
+  interface UserListing {
+    id: string;
+    title: string;
+    price: number;
+    year?: number | null;
+    mileage?: number | null;
+    fiscalPower?: number | null;
+    city: string;
+    images: string[];
+    status: string;
+    userId: string;
+    brand?: { name: string } | null;
+    model?: { name: string } | null;
+    fuelType?: string | null;
+    resolvedImageUrl?: string | null;
+  }
+  const [listings, setListings] = useState<UserListing[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +50,7 @@ export default function MesAnnoncesPage() {
       
       // Filter to only show current user's listings
       const userListings = data.listings?.filter(
-        (listing: any) => listing.userId === (session?.user as any)?.id
+        (listing: UserListing) => listing.userId === session?.user?.id
       );
       setListings(userListings || []);
     } catch (error) {
@@ -61,8 +77,8 @@ export default function MesAnnoncesPage() {
 
       toast.success("Annonce supprimée avec succès");
       fetchListings();
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de la suppression");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la suppression");
     }
   };
 
@@ -82,8 +98,8 @@ export default function MesAnnoncesPage() {
 
       toast.success("Statut mis à jour");
       fetchListings();
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de la mise à jour");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la mise à jour");
     }
   };
 

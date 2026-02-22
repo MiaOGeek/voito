@@ -2,7 +2,7 @@ import { BrandPage } from "@/components/brand-listing-page";
 import type { Metadata } from "next";
 import prisma from "@/lib/db";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -15,8 +15,6 @@ export async function generateMetadata({
 
   if (!brand) return {};
 
-  const baseUrl = process.env.NEXTAUTH_URL || "";
-
   const title = brand.metaTitle || `Motos ${brand.name} d'occasion en Tunisie | Voito`;
   const description = brand.metaDesc || `Achetez et vendez des motos ${brand.name} d'occasion en Tunisie sur Voito.`;
 
@@ -24,7 +22,7 @@ export async function generateMetadata({
     title,
     description,
     robots: { index: brand.indexable, follow: brand.indexable },
-    alternates: { canonical: `${baseUrl}/motos/${params.brand}` },
+    alternates: { canonical: `/motos/${params.brand}` },
     openGraph: {
       title,
       description,
@@ -38,7 +36,7 @@ export default async function MotosBrandPage({
   searchParams,
 }: {
   params: { brand: string };
-  searchParams: any;
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
   return <BrandPage category="MOTOS" brandSlug={params.brand} searchParams={searchParams} />;
 }

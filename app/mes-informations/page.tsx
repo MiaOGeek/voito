@@ -126,8 +126,8 @@ export default function MesInformationsPage() {
       await updateSession({ name: name.trim(), image });
 
       toast.success("Informations mises a jour avec succes");
-    } catch (error: any) {
-      toast.error(error?.message || "Erreur lors de la sauvegarde");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la sauvegarde");
     } finally {
       setSaving(false);
     }

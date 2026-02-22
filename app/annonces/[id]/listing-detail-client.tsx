@@ -11,24 +11,60 @@ import { getFileUrl } from "@/lib/s3";
 import { slugify } from "@/lib/utils";
 import { toast } from "sonner";
 
-interface ListingDetailClientProps {
-  listing: any;
-  similarListings?: any[];
+interface ListingData {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  year?: number | null;
+  mileage?: number | null;
+  fiscalPower?: number | null;
+  fuelType?: string | null;
+  transmission?: string | null;
+  city: string;
+  category: string;
+  images: string[];
+  userId: string;
+  brand?: { name: string; slug: string } | null;
+  model?: { name: string } | null;
+  user?: { name?: string | null; phone?: string | null; createdAt?: string | null } | null;
 }
 
-export default function ListingDetailClient({ listing, similarListings = [] }: ListingDetailClientProps) {
+interface SimilarListing {
+  id: string;
+  title: string;
+  price: number;
+  year?: number | null;
+  mileage?: number | null;
+  fiscalPower?: number | null;
+  city: string;
+  images: string[];
+  brand?: { name: string } | null;
+  model?: { name: string } | null;
+  fuelType?: string | null;
+  resolvedImageUrl?: string | null;
+}
+
+interface ListingDetailClientProps {
+  listing: ListingData;
+  similarListings?: SimilarListing[];
+  serverImageUrls?: string[];
+}
+
+export default function ListingDetailClient({ listing, similarListings = [], serverImageUrls = [] }: ListingDetailClientProps) {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>(serverImageUrls);
   const [showContactForm, setShowContactForm] = useState(false);
 
+  // Fallback: only fetch client-side if server didn't provide URLs
   useEffect(() => {
-    if (listing.images && listing.images.length > 0) {
+    if (imageUrls.length === 0 && listing.images && listing.images.length > 0) {
       Promise.all(listing.images.map((path: string) => getFileUrl(path, true)))
         .then((urls) => setImageUrls(urls))
         .catch((error) => console.error("Error loading images:", error));
     }
-  }, [listing.images]);
+  }, [listing.images, imageUrls.length]);
 
   return (
     <div className="min-h-screen py-8">
@@ -88,6 +124,7 @@ export default function ListingDetailClient({ listing, similarListings = [] }: L
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
+                      aria-label={`Voir la photo ${index + 1}`}
                       className={`relative aspect-video rounded-md overflow-hidden border-2 ${
                         index === currentImageIndex
                           ? "border-primary"
@@ -212,13 +249,24 @@ export default function ListingDetailClient({ listing, similarListings = [] }: L
                   {(listing.user?.name ?? "A").charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-foreground font-semibold">{listing.user?.name ?? "Anonyme"}</p>
+                  <Link
+                    href={`/vendeurs/${listing.userId}`}
+                    className="text-foreground font-semibold hover:text-primary transition-colors"
+                  >
+                    {listing.user?.name ?? "Anonyme"}
+                  </Link>
                   <p className="text-sm text-muted-foreground">
                     Membre depuis{" "}
                     {listing.user?.createdAt
                       ? new Date(listing.user.createdAt).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
                       : "récemment"}
                   </p>
+                  <Link
+                    href={`/vendeurs/${listing.userId}`}
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Voir toutes ses annonces
+                  </Link>
                 </div>
               </div>
 

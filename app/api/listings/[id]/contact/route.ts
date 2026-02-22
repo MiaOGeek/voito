@@ -16,6 +16,22 @@ export async function POST(
       );
     }
 
+    // Limit message length to prevent abuse
+    if (message.length > 5000) {
+      return NextResponse.json(
+        { error: "Message trop long (5000 caractères maximum)" },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize user inputs to prevent XSS in HTML email
+    const esc = (s: string) =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const safeName = esc(name);
+    const safeEmail = esc(email);
+    const safePhone = phone ? esc(phone) : "";
+    const safeMessage = esc(message);
+
     const listing = await prisma.listing.findUnique({
       where: { id: params.id },
       include: {
@@ -55,13 +71,13 @@ export async function POST(
           
           <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #00A8E8;">
             <h3 style="color: #2C2C2C; margin-top: 0;">Informations du contact</h3>
-            <p style="margin: 10px 0; color: #555;"><strong>Nom:</strong> ${name}</p>
-            <p style="margin: 10px 0; color: #555;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #00A8E8;">${email}</a></p>
-            ${phone ? `<p style="margin: 10px 0; color: #555;"><strong>Téléphone:</strong> ${phone}</p>` : ""}
+            <p style="margin: 10px 0; color: #555;"><strong>Nom:</strong> ${safeName}</p>
+            <p style="margin: 10px 0; color: #555;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #00A8E8;">${safeEmail}</a></p>
+            ${safePhone ? `<p style="margin: 10px 0; color: #555;"><strong>Téléphone:</strong> ${safePhone}</p>` : ""}
             
             <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 4px;">
               <p style="margin: 0 0 10px 0; color: #2C2C2C; font-weight: bold;">Message:</p>
-              <p style="margin: 0; color: #333; white-space: pre-wrap;">${message}</p>
+              <p style="margin: 0; color: #333; white-space: pre-wrap;">${safeMessage}</p>
             </div>
           </div>
           

@@ -46,6 +46,19 @@ export async function getFileUrl(cloud_storage_path: string, isPublic: boolean =
   return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 }
 
+/**
+ * Resolves an image URL synchronously for external URLs or S3 public keys.
+ */
+export function resolveImageUrl(cloud_storage_path: string): string | null {
+  if (!cloud_storage_path) return null;
+  if (cloud_storage_path.startsWith("http://") || cloud_storage_path.startsWith("https://")) {
+    return cloud_storage_path;
+  }
+  const region = process.env.AWS_REGION || "us-east-1";
+  const bucket = getBucketConfig().bucketName;
+  return `https://${bucket}.s3.${region}.amazonaws.com/${cloud_storage_path}`;
+}
+
 export async function deleteFile(cloud_storage_path: string): Promise<void> {
   const command = new DeleteObjectCommand({
     Bucket: bucketName,

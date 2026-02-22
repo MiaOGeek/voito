@@ -1,20 +1,15 @@
 import { MetadataRoute } from "next";
-import { getSiteConfig } from "@/lib/site-config";
+import { SITE_URL } from "@/lib/constants";
 
-const BASE_URL = process.env.NEXTAUTH_URL || "https://voito.tn";
-
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  const config = await getSiteConfig();
-  const allowIndexing = config?.robotsIndex ?? true;
-
-  if (!allowIndexing) {
-    return {
-      rules: { userAgent: "*", disallow: "/" },
-    };
-  }
-
+export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/mes-annonces", "/deposer", "/mes-informations", "/connexion", "/inscription", "/publier"],
+      },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

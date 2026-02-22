@@ -32,7 +32,8 @@
       "Bash(grep:*)",
       "WebFetch(domain:localhost)",
       "Bash(head:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Read(//d/opencode/**)"
     ]
   }
 }

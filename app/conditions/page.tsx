@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
+import { SITE_DOMAIN, CONTACT_EMAIL } from "@/lib/constants";
 
 export const metadata = {
   title: "Conditions d'utilisation | Voito",
+  description: "Conditions générales d'utilisation de Voito — règles de publication, responsabilités des utilisateurs et fonctionnement de la plateforme d'annonces automobiles.",
 };
 
 export default function ConditionsPage() {
@@ -23,7 +25,7 @@ export default function ConditionsPage() {
         </h1>
         <div className="card-metallic p-8 space-y-6 text-muted-foreground leading-relaxed">
           <p>
-            En utilisant le site <strong className="text-foreground">voito.tn</strong>, vous acceptez les presentes conditions d'utilisation.
+            En utilisant le site <strong className="text-foreground">{SITE_DOMAIN}</strong>, vous acceptez les presentes conditions d'utilisation.
           </p>
 
           <h2 className="text-2xl font-bold text-foreground pt-4">Inscription</h2>
@@ -58,7 +60,7 @@ export default function ConditionsPage() {
           <h2 className="text-2xl font-bold text-foreground pt-4">Contact</h2>
           <p>
             Pour toute question :{" "}
-            <a href="mailto:contact@voito.tn" className="text-primary hover:underline">contact@voito.tn</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:underline">{CONTACT_EMAIL}</a>
           </p>
         </div>
       </div>

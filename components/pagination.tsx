@@ -56,8 +56,13 @@ export default function Pagination({
     pages.push(totalPages);
   }
 
+  const prevHref = currentPage > 1 ? buildHref(basePath, currentPage - 1, searchParams) : null;
+  const nextHref = currentPage < totalPages ? buildHref(basePath, currentPage + 1, searchParams) : null;
+
   return (
     <nav className="flex items-center justify-center gap-1 mt-8" aria-label="Pagination">
+      {prevHref && <link rel="prev" href={prevHref} />}
+      {nextHref && <link rel="next" href={nextHref} />}
       {currentPage > 1 ? (
         <Link
           href={buildHref(basePath, currentPage - 1, searchParams)}
@@ -82,6 +87,7 @@ export default function Pagination({
           <Link
             key={page}
             href={buildHref(basePath, page, searchParams)}
+            aria-current={page === currentPage ? "page" : undefined}
             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               page === currentPage
                 ? "bg-primary text-primary-foreground"

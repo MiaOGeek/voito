@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
+import { cache } from "react";
+import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { getFileUrl } from "@/lib/s3";
+import { resolveImageUrl } from "@/lib/s3";
 import ListingDetailClient from "./listing-detail-client";
+import { SITE_URL } from "@/lib/constants";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-async function getListing(id: string) {
+const getListing = cache(async function getListing(id: string) {
   const listing = await prisma.listing.findUnique({
     where: { id },
     include: {
@@ -14,6 +18,7 @@ async function getListing(id: string) {
       model: true,
       user: {
         select: {
+          id: true,
           name: true,
           phone: true,
           email: true,
@@ -24,7 +29,7 @@ async function getListing(id: string) {
   });
 
   return listing;
-}
+});
 
 export async function generateMetadata({
   params,
@@ -40,33 +45,34 @@ export async function generateMetadata({
     listing.metaDesc ||
     listing.description.substring(0, 160);
 
-  // Try to get OG image from the first listing image
-  let ogImage = "/og-image.png";
+  // Resolve first image for OG/Twitter
+  let ogImages: { url: string; alt: string }[] = [];
   if (listing.images && (listing.images as string[]).length > 0) {
     try {
-      ogImage = await getFileUrl((listing.images as string[])[0], true);
+      const urls = await Promise.all(
+        (listing.images as string[]).slice(0, 4).map((path) => getFileUrl(path, true))
+      );
+      ogImages = urls.map((url) => ({ url, alt: listing.title }));
     } catch {
-      // fallback to default
+      // fallback: no OG images
     }
   }
-
-  const baseUrl = process.env.NEXTAUTH_URL || "";
 
   return {
     title,
     description,
-    alternates: { canonical: `${baseUrl}/annonces/${params.id}` },
+    alternates: { canonical: `/annonces/${params.id}` },
     openGraph: {
       title,
       description,
-      images: [ogImage],
       type: "article",
+      ...(ogImages.length > 0 && { images: ogImages }),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
+      ...(ogImages.length > 0 && { images: [ogImages[0].url] }),
     },
   };
 }
@@ -80,7 +86,7 @@ export default async function ListingDetailPage({
 
   if (!listing) notFound();
 
-  const baseUrl = process.env.NEXTAUTH_URL || "";
+  const baseUrl = SITE_URL;
   const categoryPath = listing.category === "VOITURES" ? "voitures" : listing.category === "MOTOS" ? "motos" : "pieces";
 
   // Build image URLs for JSON-LD
@@ -98,7 +104,7 @@ export default async function ListingDetailPage({
   // JSON-LD structured data
   const isVehicle = listing.category === "VOITURES" || listing.category === "MOTOS";
 
-  const jsonLd: Record<string, any> = isVehicle
+  const jsonLd: Record<string, unknown> = isVehicle
     ? {
         "@context": "https://schema.org",
         "@type": "Vehicle",
@@ -150,7 +156,7 @@ export default async function ListingDetailPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl || undefined },
+      { "@type": "ListItem", position: 1, name: "Voito", item: baseUrl },
       {
         "@type": "ListItem",
         position: 2,
@@ -171,12 +177,13 @@ export default async function ListingDetailPage({
         "@type": "ListItem",
         position: listing.brand ? 4 : 3,
         name: listing.title,
+        item: `${baseUrl}/annonces/${listing.id}`,
       },
     ],
   };
 
   // Fetch similar listings (same model, or same brand, or same city)
-  const similarWhere: any[] = [];
+  const similarWhere: Prisma.ListingWhereInput[] = [];
   if (listing.modelId) {
     similarWhere.push({ modelId: listing.modelId });
   }
@@ -197,9 +204,15 @@ export default async function ListingDetailPage({
     take: 6,
   });
 
+  const processedSimilarListings = similarListings.map((listing) => ({
+    ...listing,
+    images: (listing.images ?? []) as string[],
+    resolvedImageUrl: Array.isArray(listing.images) && listing.images[0] ? resolveImageUrl(listing.images[0] as string) : null,
+  }));
+
   // Serialize dates for the client component
   const serializedListing = JSON.parse(JSON.stringify(listing));
-  const serializedSimilar = JSON.parse(JSON.stringify(similarListings));
+  const serializedSimilar = JSON.parse(JSON.stringify(processedSimilarListings));
 
   return (
     <>
@@ -211,7 +224,7 @@ export default async function ListingDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <ListingDetailClient listing={serializedListing} similarListings={serializedSimilar} />
+      <ListingDetailClient listing={serializedListing} similarListings={serializedSimilar} serverImageUrls={imageUrls} />
     </>
   );
 }

@@ -30,6 +30,21 @@ export async function POST(request: Request) {
       );
     }
 
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: "Type de fichier non autorisé. Formats acceptés : JPG, PNG, WebP, GIF" },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "Fichier trop volumineux (5 Mo maximum)" },
+        { status: 400 }
+      );
+    }
+
     // Convert file to base64 data URI
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);

@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "./providers";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { getSiteConfig } from "@/lib/site-config";
+import { SITE_URL } from "@/lib/constants";
 
-export const dynamic = "force-dynamic";
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+export const revalidate = 300; // ISR: revalidate layout config every 5 minutes
 
 export async function generateMetadata(): Promise<Metadata> {
-  const metadataBase = process.env.NEXTAUTH_URL
-    ? new URL(process.env.NEXTAUTH_URL)
-    : undefined;
+  const metadataBase = new URL(SITE_URL);
 
   const config = await getSiteConfig();
 
@@ -25,7 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     metadataBase,
     alternates: {
-      canonical: metadataBase?.toString() || "/",
+      languages: {
+        "fr-TN": metadataBase.toString(),
+      },
     },
     keywords:
       "voitures occasion tunisie, motos occasion, pièces détachées, annonces automobiles, vente voiture tunisie",
@@ -60,27 +69,10 @@ export default async function RootLayout({
   const config = await getSiteConfig();
 
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={inter.variable} suppressHydrationWarning>
       <head>
-        <script src="https://apps.abacus.ai/chatllm/appllm-lib.js"></script>
-        {config?.googleAnalyticsId && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${config.googleAnalyticsId}');`,
-              }}
-            />
-          </>
-        )}
-        {config?.googleAdsenseCode && (
-          <script
-            dangerouslySetInnerHTML={{ __html: config.googleAdsenseCode }}
-          />
-        )}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://apps.abacus.ai" />
         {config?.schemaOrgJsonLd && (
           <script
             type="application/ld+json"
@@ -95,6 +87,32 @@ export default async function RootLayout({
           <Footer />
           <Toaster position="top-right" theme="dark" />
         </Providers>
+        <Script
+          src="https://apps.abacus.ai/chatllm/appllm-lib.js"
+          strategy="lazyOnload"
+        />
+        {config?.googleAnalyticsId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="ga-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${config.googleAnalyticsId}');`,
+              }}
+            />
+          </>
+        )}
+        {config?.googleAdsenseCode && (
+          <Script
+            id="adsense"
+            strategy="lazyOnload"
+            dangerouslySetInnerHTML={{ __html: config.googleAdsenseCode }}
+          />
+        )}
       </body>
     </html>
   );

@@ -41,6 +41,12 @@ export default function Header() {
             >
               Pièces détachées
             </Link>
+            <Link
+              href="/blog"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Blog
+            </Link>
           </nav>
 
           {/* Actions */}
@@ -83,8 +89,10 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-3 text-foreground"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -113,6 +121,13 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Pièces détachées
+            </Link>
+            <Link
+              href="/blog"
+              className="block text-foreground hover:text-primary transition-colors font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Blog
             </Link>
             <Link
               href={session ? "/deposer" : "/publier"}
