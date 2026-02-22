@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(ping:*)",
+      "Bash(where:*)",
+      "Bash(pg_isready:*)",
+      "Bash(psql:*)",
+      "Bash(set:*)",
+      "Bash(cmd /c \"set PGPASSWORD=postgres && \"C:UsersSBSAppDataLocalProgramspgAdmin 4runtimepsql.exe\" -h localhost -U postgres -c \"CREATE DATABASE voito)",
+      "Bash(\"\")",
+      "Bash(\"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\" -h localhost -U postgres -c \"CREATE DATABASE voito;\")",
+      "Bash(PGPASSWORD=postgres \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\createdb.exe\":*)",
+      "Bash(PGPASSWORD=admin \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\createdb.exe\":*)",
+      "Bash(npx prisma:*)",
+      "Bash(npx tsx:*)",
+      "WebFetch(domain:www.mototunisie.tn)",
+      "WebFetch(domain:www.automobile.tn)",
+      "WebFetch(domain:www.karhabtk.tn)",
+      "Bash(test:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx create-next-app@14:*)",
+      "Bash(npm init:*)",
+      "Bash(echo:*)",
+      "Bash(npx next build:*)",
+      "Bash(./node_modules/.bin/prisma generate:*)",
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(npx prisma@6.7.0 generate)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(head:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import { Providers } from "./providers";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { Toaster } from "sonner";
+import { getSiteConfig } from "@/lib/site-config";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metadataBase = process.env.NEXTAUTH_URL
+    ? new URL(process.env.NEXTAUTH_URL)
+    : undefined;
+
+  const config = await getSiteConfig();
+
+  const title = config?.metaTitle || config?.siteTitle || "Voito - Petites Annonces Automobiles en Tunisie";
+  const description = config?.metaDesc || config?.siteDescription || "Découvrez des milliers d'annonces de voitures, motos et pièces détachées d'occasion en Tunisie. Achetez et vendez en toute sécurité sur Voito.";
+  const ogImage = config?.ogImage || "/og-image.png";
+  const favicon = config?.favicon || "/favicon.svg";
+
+  return {
+    title,
+    description,
+    metadataBase,
+    alternates: {
+      canonical: metadataBase?.toString() || "/",
+    },
+    keywords:
+      "voitures occasion tunisie, motos occasion, pièces détachées, annonces automobiles, vente voiture tunisie",
+    openGraph: {
+      title,
+      description,
+      images: [ogImage],
+      type: (config?.ogType as "website" | "article") || "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+    icons: {
+      icon: favicon,
+      shortcut: favicon,
+    },
+    robots: {
+      index: config?.robotsIndex ?? true,
+      follow: config?.robotsIndex ?? true,
+    },
+  };
+}
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const config = await getSiteConfig();
+
+  return (
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script src="https://apps.abacus.ai/chatllm/appllm-lib.js"></script>
+        {config?.googleAnalyticsId && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${config.googleAnalyticsId}');`,
+              }}
+            />
+          </>
+        )}
+        {config?.googleAdsenseCode && (
+          <script
+            dangerouslySetInnerHTML={{ __html: config.googleAdsenseCode }}
+          />
+        )}
+        {config?.schemaOrgJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: config.schemaOrgJsonLd }}
+          />
+        )}
+      </head>
+      <body className="min-h-screen flex flex-col">
+        <Providers>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Toaster position="top-right" theme="dark" />
+        </Providers>
+      </body>
+    </html>
+  );
+}
