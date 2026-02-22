@@ -4,14 +4,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:-3000}",
+    "start": "next start",
     "lint": "next lint"
   },
   "prisma": {
     "seed": "tsx --require dotenv/config scripts/seed.ts"
   },
   "devDependencies": {
-    "@next/swc-wasm-nodejs": "13.5.1",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "20.6.2",
     "@types/nodemailer": "^6.4.9",
