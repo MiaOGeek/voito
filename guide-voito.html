@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide Voito — Administration &amp; Deploiement</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; padding: 2rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2rem; color: #38bdf8; margin-bottom: 0.5rem; }
+    .subtitle { color: #94a3b8; margin-bottom: 2rem; font-size: 0.95rem; }
+    h2 { font-size: 1.3rem; color: #f59e0b; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #334155; }
+    h3 { font-size: 1.1rem; color: #a78bfa; margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 0.8rem; color: #cbd5e1; }
+    code { background: #1e293b; color: #67e8f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    pre { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 0.8rem 0 1.2rem; }
+    pre code { background: none; padding: 0; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .alert { border-left: 4px solid #f59e0b; background: #1e293b; padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+    .alert-danger { border-left-color: #ef4444; }
+    .alert-success { border-left-color: #22c55e; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; margin-right: 4px; }
+    .badge-todo { background: #f59e0b; color: #000; }
+    .badge-done { background: #22c55e; color: #000; }
+    .badge-info { background: #3b82f6; color: #fff; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.6rem 1rem; border-bottom: 1px solid #334155; }
+    th { color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: #e2e8f0; }
+    .timestamp { color: #64748b; font-size: 0.85rem; }
+    ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+    li { margin-bottom: 0.4rem; color: #cbd5e1; }
+    a { color: #38bdf8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .toc { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .toc a { display: block; padding: 4px 0; color: #94a3b8; }
+    .toc a:hover { color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Guide Voito</h1>
+    <p class="subtitle">Administration, deploiement &amp; SEO — Mis a jour le 20 mai 2026</p>
+
+    <!-- TABLE DES MATIERES -->
+    <div class="toc">
+      <strong style="color:#e2e8f0;">Sommaire</strong>
+      <a href="#todo">1. Actions a faire (TODO)</a>
+      <a href="#deploy">2. Deploiement (Hostinger)</a>
+      <a href="#seo-brands">3. Contenu SEO des marques</a>
+      <a href="#scripts">4. Scripts utiles</a>
+      <a href="#webmaster">5. Webmaster Tools</a>
+      <a href="#troubleshooting">6. Depannage</a>
+      <a href="#files">7. Fichiers cles</a>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="todo">1. Actions a faire (TODO)</h2>
+    <!-- ============================================ -->
+
+    <div class="alert">
+      <p><span class="badge badge-todo">TODO</span> <strong>Lancer le seed SEO des marques manquantes</strong></p>
+      <p>9 nouvelles marques ont ete ajoutees dans <code>seed-brands-seo.js</code> mais le script n'a pas encore ete execute sur la base de production.</p>
+      <pre><code># Via SSH sur Hostinger
+cd ~/domains/voito.info/public_html
+node scripts/seed-brands-seo.js</code></pre>
+    </div>
+
+    <div class="alert">
+      <p><span class="badge badge-todo">TODO</span> <strong>Valider Bing Webmaster Tools</strong></p>
+      <p>Le fichier <code>public/BingSiteAuth.xml</code> a ete ajoute au projet. Apres deploy, aller sur <a href="https://www.bing.com/webmasters">Bing Webmaster Tools</a> et lancer la verification.</p>
+    </div>
+
+    <div class="alert alert-success">
+      <p><span class="badge badge-done">FAIT</span> <strong>Google Search Console</strong></p>
+      <p>Fichier <code>google2762cd1c797ee2a8.html</code> present a la racine.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="deploy">2. Deploiement (Hostinger)</h2>
+    <!-- ============================================ -->
+
+    <div class="card">
+      <h3>Environnement</h3>
+      <table>
+        <tr><th>Element</th><th>Valeur</th></tr>
+        <tr><td>Hosting</td><td>Hostinger — Phusion Passenger</td></tr>
+        <tr><td>Node.js</td><td><code>/opt/alt/alt-nodejs22/root/bin/node</code> (v22)</td></tr>
+        <tr><td>App root</td><td><code>~/domains/voito.info/public_html/</code></td></tr>
+        <tr><td>Build mode</td><td>Next.js standalone (<code>output: "standalone"</code>)</td></tr>
+        <tr><td>Entry point</td><td><code>server.js</code> (auto-genere par Next.js)</td></tr>
+        <tr><td>Base de donnees</td><td>MySQL via Prisma</td></tr>
+      </table>
+    </div>
+
+    <h3>Processus de deploy</h3>
+    <ol>
+      <li>Faire un <code>git push</code> sur la branche <code>master</code></li>
+      <li>Hostinger clone le repo dans <code>.builds/source/</code></li>
+      <li>Execute <code>npm install</code> (fallback <code>--legacy-peer-deps</code>)</li>
+      <li>Execute <code>npm run build</code></li>
+      <li>Copie le build standalone dans <code>public_html/</code></li>
+      <li>Passenger demarre <code>server.js</code></li>
+    </ol>
+
+    <h3>Redemarrer sans redeployer</h3>
+    <pre><code>touch ~/domains/voito.info/public_html/tmp/restart.txt</code></pre>
+
+    <!-- ============================================ -->
+    <h2 id="seo-brands">3. Contenu SEO des marques</h2>
+    <!-- ============================================ -->
+
+    <p>Chaque marque (Brand) possede des champs SEO en base :</p>
+    <ul>
+      <li><code>h2Top</code> / <code>descriptionTop</code> — contenu au-dessus des annonces</li>
+      <li><code>h2Bottom</code> / <code>descriptionBottom</code> — contenu en dessous</li>
+      <li><code>metaTitle</code> / <code>metaDesc</code> — balises meta pour le SEO</li>
+    </ul>
+    <p>Si ces champs sont <code>NULL</code>, la page s'affiche sans texte SEO (composant <code>SeoContent</code> retourne <code>null</code>).</p>
+
+    <h3>Etat actuel : 36 marques avec contenu SEO</h3>
+
+    <table>
+      <tr><th>Categorie</th><th>Nombre</th><th>Marques</th></tr>
+      <tr>
+        <td><span class="badge badge-info">VOITURES</span></td>
+        <td>21</td>
+        <td>Audi, BAIC, BMW, Citroen, Fiat, Ford, Honda, Hyundai, Jaguar, Kia, Land Rover, Mazda, Mercedes, Nissan, Peugeot, Porsche, Renault, Seat, Toyota, Volkswagen, Volvo</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-info">MOTOS</span></td>
+        <td>6</td>
+        <td>Forza, FTM, Peugeot, SLC, SYM, Zimota</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-info">PIECES</span></td>
+        <td>9</td>
+        <td>Citroen, Fiat, Hyundai, Kia, Peugeot, Renault, Seat, Toyota, Volkswagen</td>
+      </tr>
+    </table>
+
+    <div class="alert">
+      <p><strong>Marques ajoutees le 20/05/2026 :</strong></p>
+      <ul>
+        <li>VOITURES : <strong>Peugeot, Renault, Toyota, Fiat, Kia, BAIC</strong></li>
+        <li>PIECES : <strong>Citroen, Hyundai, Seat</strong></li>
+      </ul>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="scripts">4. Scripts utiles</h2>
+    <!-- ============================================ -->
+
+    <div class="card">
+      <table>
+        <tr><th>Script</th><th>Usage</th></tr>
+        <tr>
+          <td><code>node scripts/seed-brands-seo.js</code></td>
+          <td>Injecte le contenu SEO (h2, description, meta) pour toutes les marques</td>
+        </tr>
+        <tr>
+          <td><code>node scripts/seed-from-json.js data/fichier.json</code></td>
+          <td>Injecte une marque + ses modeles depuis un fichier JSON</td>
+        </tr>
+        <tr>
+          <td><code>node scripts/list-brands.js</code></td>
+          <td>Liste toutes les marques en base avec leur statut SEO (Y/N)</td>
+        </tr>
+        <tr>
+          <td><code>node scripts/list-models.js</code></td>
+          <td>Liste tous les modeles en base</td>
+        </tr>
+        <tr>
+          <td><code>npx prisma db seed</code></td>
+          <td>Seed initial (15 marques + modeles + user test)</td>
+        </tr>
+        <tr>
+          <td><code>npx ts-node scripts/seed-voitures.ts</code></td>
+          <td>Ajoute 5 marques voitures premium + annonces</td>
+        </tr>
+        <tr>
+          <td><code>npx ts-node scripts/seed-motos.ts</code></td>
+          <td>Ajoute les marques motos + annonces</td>
+        </tr>
+        <tr>
+          <td><code>npx ts-node scripts/seed-pieces.ts</code></td>
+          <td>Ajoute les pieces detachees + annonces</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="webmaster">5. Webmaster Tools</h2>
+    <!-- ============================================ -->
+
+    <div class="card">
+      <table>
+        <tr><th>Service</th><th>Statut</th><th>Fichier de verification</th></tr>
+        <tr>
+          <td>Google Search Console</td>
+          <td><span class="badge badge-done">OK</span></td>
+          <td><code>google2762cd1c797ee2a8.html</code></td>
+        </tr>
+        <tr>
+          <td>Bing Webmaster Tools</td>
+          <td><span class="badge badge-todo">A VALIDER</span></td>
+          <td><code>public/BingSiteAuth.xml</code></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="troubleshooting">6. Depannage</h2>
+    <!-- ============================================ -->
+
+    <h3>Erreur 503 apres deploy</h3>
+    <pre><code>touch ~/domains/voito.info/public_html/tmp/restart.txt</code></pre>
+
+    <h3>Build echoue</h3>
+    <p>Verifier les logs dans le panel Hostinger ou dans <code>.builds/logs/</code></p>
+
+    <h3>Test manuel du serveur</h3>
+    <pre><code>/opt/alt/alt-nodejs22/root/bin/node ~/domains/voito.info/public_html/server.js</code></pre>
+
+    <h3>Page marque vide (pas de texte SEO)</h3>
+    <ol>
+      <li>Verifier avec <code>node scripts/list-brands.js</code> — les marques avec "N" n'ont pas de contenu</li>
+      <li>Ajouter l'entree dans <code>scripts/seed-brands-seo.js</code></li>
+      <li>Relancer <code>node scripts/seed-brands-seo.js</code></li>
+    </ol>
+
+    <!-- ============================================ -->
+    <h2 id="files">7. Fichiers cles</h2>
+    <!-- ============================================ -->
+
+    <div class="card">
+      <table>
+        <tr><th>Fichier</th><th>Role</th></tr>
+        <tr><td><code>app/voitures/[brand]/page.tsx</code></td><td>Page dynamique par marque voiture</td></tr>
+        <tr><td><code>app/voitures/[brand]/[model]/page.tsx</code></td><td>Page dynamique par modele</td></tr>
+        <tr><td><code>components/brand-listing-page.tsx</code></td><td>Composant principal (fetch DB + rendu)</td></tr>
+        <tr><td><code>components/seo-content.tsx</code></td><td>Affiche h2 + description HTML</td></tr>
+        <tr><td><code>prisma/schema.prisma</code></td><td>Schema DB (Brand, Model, Listing...)</td></tr>
+        <tr><td><code>scripts/seed-brands-seo.js</code></td><td>Contenu SEO de 36 marques</td></tr>
+        <tr><td><code>scripts/seed-from-json.js</code></td><td>Import marque + modeles depuis JSON</td></tr>
+        <tr><td><code>DEPLOYMENT.md</code></td><td>Notes de deploiement</td></tr>
+      </table>
+    </div>
+
+    <p class="timestamp" style="margin-top:3rem; text-align:center;">Derniere mise a jour : 20 mai 2026 — Genere avec Claude Code</p>
+
+  </div>
+</body>
+</html>

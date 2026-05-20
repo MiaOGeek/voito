@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const brandsSeo = [
   // ═══════════════════════════════════════════
-  // VOITURES (15 marques)
+  // VOITURES (21 marques)
   // ═══════════════════════════════════════════
   {
     slug: "audi",
@@ -156,6 +156,67 @@ const brandsSeo = [
     descriptionBottom: "Le marché Volvo d'occasion en Tunisie reste une niche qualitative. Les propriétaires soignent généralement l'entretien de ces véhicules, ce qui se traduit par des exemplaires en bon état sur le marché secondaire. Profitez de la plateforme Voito pour acheter directement au propriétaire ou pour céder votre Volvo à un acheteur sérieux. Aucune commission, publication gratuite, contact sécurisé.",
   },
 
+  {
+    slug: "peugeot",
+    category: "VOITURES",
+    metaTitle: "Peugeot occasion Tunisie — 208, 308, 3008 entre particuliers | Voito",
+    metaDesc: "Peugeot d'occasion en Tunisie : 208, 308, 2008, 3008, 508. Annonces entre particuliers, prix en dinars tunisiens. Comparez sur Voito.",
+    h2Top: "Peugeot d'occasion en Tunisie : la marque préférée des Tunisiens",
+    descriptionTop: "Peugeot domine le marché automobile tunisien depuis des décennies. De la citadine 208 agile et économique au SUV familial 3008 en passant par la compacte 308, le crossover 2008 et la routière 508, la gamme au lion couvre tous les besoins. Sur Voito, les propriétaires tunisiens revendent leurs Peugeot avec des fiches détaillées : motorisation essence, diesel ou hybride, kilométrage réel, état de la carrosserie, historique d'entretien et prix en dinars. Les photos intérieures et extérieures vous permettent d'évaluer chaque véhicule avant de contacter le vendeur.",
+    h2Bottom: "Vendre ou acheter une Peugeot d'occasion sur Voito",
+    descriptionBottom: "Avec le parc Peugeot le plus important du pays, le choix d'occasion est vaste et les pièces de rechange facilement disponibles. Sur Voito, la transaction se fait directement entre particuliers, sans commission ni marge de revendeur. Que vous cherchiez une 208 pour vos trajets en ville ou un 3008 pour la famille, filtrez par modèle, année et budget pour trouver rapidement la bonne affaire. Vendeurs, publiez votre annonce gratuitement et touchez des acheteurs dans les 24 gouvernorats.",
+  },
+  {
+    slug: "renault",
+    category: "VOITURES",
+    metaTitle: "Renault occasion Tunisie — Clio, Symbol, Megane, Duster | Voito",
+    metaDesc: "Renault d'occasion en Tunisie : Clio, Symbol, Megane, Captur, Duster. Annonces entre particuliers, prix TND. Trouvez sur Voito.",
+    h2Top: "Renault d'occasion en Tunisie : fiabilité et polyvalence française",
+    descriptionTop: "Incontournable sur les routes tunisiennes, Renault offre une gamme complète adaptée à tous les usages. La Clio, citadine best-seller, brille par son coût d'entretien réduit. La Symbol (Logan) séduit les familles avec son coffre généreux et sa robustesse. La Megane associe confort et tenue de route, le Captur inaugure le segment crossover accessible et le Duster propose un vrai SUV à tarif maîtrisé. Les vendeurs particuliers sur Voito indiquent la motorisation, le kilométrage, le type de boîte et le prix en dinars pour chaque annonce.",
+    h2Bottom: "Acheter une Renault entre particuliers en Tunisie",
+    descriptionBottom: "Le réseau de pièces détachées Renault en Tunisie est l'un des plus développés, ce qui rend l'entretien simple et abordable. Sur Voito, vous achetez directement au propriétaire, sans surcoût ni intermédiaire. Parcourez les annonces, comparez les prix et contactez le vendeur pour organiser un essai. Publication d'annonce gratuite pour les Tunisiens souhaitant revendre leur Renault.",
+  },
+  {
+    slug: "toyota",
+    category: "VOITURES",
+    metaTitle: "Toyota occasion Tunisie — Yaris, Corolla, RAV4, Hilux | Voito",
+    metaDesc: "Toyota d'occasion en Tunisie : Yaris, Corolla, Camry, RAV4, Hilux. Annonces entre particuliers, prix en dinars. Offres sur Voito.",
+    h2Top: "Toyota d'occasion en Tunisie : fiabilité légendaire",
+    descriptionTop: "Toyota jouit d'une réputation de fiabilité inégalée auprès des automobilistes tunisiens. La Yaris, compacte et économe, est la citadine de référence. La Corolla reste la berline la plus vendue au monde grâce à son endurance mécanique. Le RAV4 combine confort et capacités tout-terrain, la Camry offre un habitacle spacieux pour les longs trajets, et le Hilux domine le segment des pick-up professionnels. Sur Voito, chaque annonce Toyota précise le kilométrage, la motorisation, l'année et le prix en dinars tunisiens, accompagnés de photos détaillées.",
+    h2Bottom: "Vendre ou acheter une Toyota d'occasion sur Voito",
+    descriptionBottom: "Les Toyota conservent une cote de revente parmi les plus élevées du marché tunisien, preuve de la confiance des acheteurs. Sur Voito, la vente entre particuliers vous garantit le meilleur prix, sans commission ni intermédiaire. Filtrez par modèle, budget et localisation pour trouver le véhicule idéal. Propriétaires de Toyota, publiez votre annonce gratuitement et bénéficiez d'une visibilité nationale.",
+  },
+  {
+    slug: "fiat",
+    category: "VOITURES",
+    metaTitle: "Fiat occasion Tunisie — 500, Punto, Tipo, Panda | Voito",
+    metaDesc: "Fiat d'occasion en Tunisie : 500, Punto, Tipo, Panda, Doblo. Annonces entre particuliers, prix en dinars. Comparez sur Voito.",
+    h2Top: "Fiat d'occasion en Tunisie : l'italienne accessible et pratique",
+    descriptionTop: "Fiat occupe une place de choix dans le quotidien des Tunisiens grâce à des modèles abordables et faciles à entretenir. La Fiat 500 charme par son style rétro et sa maniabilité en ville. La Punto reste une valeur sûre parmi les citadines polyvalentes, le Tipo offre l'espace d'une berline à tarif compétitif, et la Panda séduit par sa simplicité et sa robustesse. Sur Voito, les propriétaires publient leurs Fiat avec le prix en dinars, le kilométrage exact, la motorisation et des photos permettant de juger l'état du véhicule.",
+    h2Bottom: "Acheter une Fiat d'occasion entre particuliers",
+    descriptionBottom: "Les Fiat d'occasion figurent parmi les véhicules les plus accessibles du marché tunisien. Pièces de rechange disponibles partout, mécanique simple et coût de possession réduit : c'est le choix malin pour un premier achat ou une voiture du quotidien. Sur Voito, la vente se fait sans intermédiaire ni commission. Parcourez les annonces dans votre gouvernorat ou publiez la vôtre gratuitement.",
+  },
+  {
+    slug: "kia",
+    category: "VOITURES",
+    metaTitle: "Kia occasion Tunisie — Picanto, Rio, Sportage, Ceed | Voito",
+    metaDesc: "Kia d'occasion en Tunisie : Picanto, Rio, Ceed, Sportage, Sorento. Annonces entre particuliers, prix TND. Offres sur Voito.",
+    h2Top: "Kia d'occasion en Tunisie : qualité coréenne et garantie étendue",
+    descriptionTop: "Kia a su conquérir le marché tunisien grâce à un excellent rapport qualité-prix et une garantie constructeur parmi les plus longues du secteur. La Picanto, micro-citadine économique, s'adapte parfaitement au trafic urbain. La Rio offre davantage d'espace tout en restant abordable, la Ceed rivalise avec les compactes européennes, et le Sportage s'impose comme l'un des SUV les plus vendus en Tunisie. Sur Voito, les vendeurs particuliers affichent le prix en dinars, le kilométrage, la motorisation et les options de chaque Kia.",
+    h2Bottom: "Vendre ou acheter une Kia d'occasion sur Voito",
+    descriptionBottom: "Le succès grandissant de Kia en Tunisie se traduit par une offre d'occasion de plus en plus riche. Les modèles récents bénéficient d'équipements modernes et de finitions soignées qui rivalisent avec les marques européennes. Sur Voito, acheteurs et vendeurs se rencontrent sans commission. Explorez les annonces, comparez les tarifs et contactez le propriétaire directement. Publication gratuite pour les vendeurs.",
+  },
+  {
+    slug: "baic",
+    category: "VOITURES",
+    metaTitle: "BAIC occasion Tunisie — X55, X35, BJ40 annonces | Voito",
+    metaDesc: "BAIC d'occasion en Tunisie : X55, X35, BJ40, Senova. Annonces entre particuliers, prix en dinars. SUV chinois sur Voito.",
+    h2Top: "BAIC d'occasion en Tunisie : SUV chinois au meilleur prix",
+    descriptionTop: "BAIC (Beijing Automotive Industry Corporation) s'est rapidement fait une place sur le marché tunisien grâce à des SUV spacieux proposés à des tarifs très compétitifs. Le X55 offre un habitacle généreux et des équipements technologiques surprenants pour son prix. Le X35 cible les amateurs de crossover urbain compact, tandis que le BJ40, véritable tout-terrain, séduit les aventuriers avec sa silhouette robuste. Sur Voito, les particuliers revendent leurs BAIC avec le prix en dinars, le kilométrage, la motorisation et des photos de l'état réel du véhicule.",
+    h2Bottom: "Acheter un BAIC d'occasion entre particuliers",
+    descriptionBottom: "Les véhicules BAIC d'occasion constituent une option intéressante pour les acheteurs tunisiens à la recherche d'un SUV récent et bien équipé sans dépasser leur budget. Sur Voito, la vente se fait directement entre particuliers, sans commission. Comparez les offres disponibles, vérifiez les caractéristiques et contactez le propriétaire en quelques clics. Vendeurs, publiez votre BAIC gratuitement sur la plateforme.",
+  },
+
   // ═══════════════════════════════════════════
   // MOTOS (6 marques)
   // ═══════════════════════════════════════════
@@ -221,7 +282,7 @@ const brandsSeo = [
   },
 
   // ═══════════════════════════════════════════
-  // PIECES (6 marques)
+  // PIECES (9 marques)
   // ═══════════════════════════════════════════
   {
     slug: "fiat",
@@ -282,6 +343,36 @@ const brandsSeo = [
     descriptionTop: "Volkswagen occupe une place importante dans le parc automobile tunisien, en particulier avec la Golf, la Polo, le Caddy et le Tiguan. La demande en pièces de rechange suit cette popularité. Sur Voito, vous trouverez des composants moteur (TSI et TDI), des éléments de boîte DSG, des pièces de suspension, de freinage, d'éclairage et de carrosserie. Les vendeurs précisent le code pièce, la génération du véhicule compatible (Golf 5, 6, 7…), l'état et le tarif en dinars tunisiens.",
     h2Bottom: "Trouvez vos pièces VW d'occasion sur Voito",
     descriptionBottom: "Entretenir une Volkswagen en Tunisie devient plus abordable grâce aux pièces d'occasion disponibles sur Voito. Comparez les offres de particuliers et de professionnels du démontage, vérifiez les références et négociez le prix directement. La plateforme ne prélève aucune commission. Vendeurs, déposez vos pièces VW gratuitement pour les rendre visibles aux propriétaires de Volkswagen dans tout le pays.",
+  },
+  {
+    slug: "citroen",
+    category: "PIECES",
+    metaTitle: "Pièces Citroën occasion Tunisie — C3, C4, Berlingo | Voito",
+    metaDesc: "Pièces détachées Citroën en Tunisie : C3, C4, C-Elysée, Berlingo, DS3. Neuves et occasion, prix en dinars. Annonces sur Voito.",
+    h2Top: "Pièces détachées Citroën disponibles en Tunisie",
+    descriptionTop: "Le parc Citroën en Tunisie est important, en particulier avec la C-Elysée, la C3, le Berlingo et la C4, ce qui génère une forte demande en pièces de rechange. Sur Voito, retrouvez des composants mécaniques (embrayage, courroie de distribution, pompe à eau), des pièces de carrosserie (pare-chocs, rétroviseurs, capots), de l'éclairage (phares, feux arrière) et des éléments d'habitacle. Les vendeurs — particuliers et professionnels du recyclage auto — précisent la référence, la compatibilité par modèle et année, l'état de la pièce et le prix en dinars tunisiens.",
+    h2Bottom: "Trouvez vos pièces Citroën au meilleur prix",
+    descriptionBottom: "Entretenir ou réparer une Citroën en Tunisie est plus économique quand on accède à des pièces d'occasion de qualité. Voito réunit les offres de tout le pays sur une seule plateforme. Comparez les tarifs, vérifiez les photos et contactez le vendeur pour vous assurer de la compatibilité. La plateforme est gratuite pour les acheteurs comme pour les vendeurs, et aucune commission n'est prélevée.",
+  },
+  {
+    slug: "hyundai",
+    category: "PIECES",
+    metaTitle: "Pièces Hyundai occasion Tunisie — Accent, Tucson, i10 | Voito",
+    metaDesc: "Pièces détachées Hyundai en Tunisie : i10, i20, Accent, Tucson, Elantra. Neuves et occasion, prix TND. Annonces sur Voito.",
+    h2Top: "Pièces détachées Hyundai en Tunisie",
+    descriptionTop: "Hyundai étant l'une des marques les plus vendues en Tunisie, la demande en pièces de rechange ne cesse de croître. Filtres à huile, plaquettes de frein, amortisseurs, alternateurs, optiques et garnitures intérieures : sur Voito, vous trouverez des pièces compatibles avec les i10, i20, Accent, Tucson, Elantra et autres modèles Hyundai. Les vendeurs indiquent la référence, la compatibilité, l'état de la pièce et le tarif en dinars tunisiens, avec photos à l'appui.",
+    h2Bottom: "Achetez vos pièces Hyundai entre particuliers",
+    descriptionBottom: "Les pièces Hyundai d'occasion et neuves proposées sur Voito par des particuliers et des casseurs automobiles tunisiens permettent d'obtenir des tarifs bien en dessous du catalogue officiel. Contactez directement le vendeur pour négocier le prix ou vérifier la disponibilité. Service gratuit, sans commission.",
+  },
+  {
+    slug: "seat",
+    category: "PIECES",
+    metaTitle: "Pièces Seat occasion Tunisie — Ibiza, Leon, Ateca | Voito",
+    metaDesc: "Pièces détachées Seat en Tunisie : Ibiza, Leon, Arona, Ateca. Neuves et occasion, prix en dinars. Annonces sur Voito.",
+    h2Top: "Pièces détachées Seat disponibles en Tunisie",
+    descriptionTop: "Seat partage les plateformes du groupe Volkswagen, ce qui rend les pièces de rechange largement interchangeables avec celles de VW, Audi et Skoda. Sur Voito, retrouvez des composants pour l'Ibiza, la Leon, l'Arona et l'Ateca : pièces moteur TSI et TDI, éléments de boîte DSG, pièces de suspension, freinage, éclairage et carrosserie. Les vendeurs précisent la référence, le modèle compatible, l'état et le tarif en dinars tunisiens.",
+    h2Bottom: "Trouvez vos pièces Seat au meilleur prix",
+    descriptionBottom: "La compatibilité des pièces Seat avec le groupe VAG multiplie les options d'approvisionnement. Sur Voito, comparez les offres de particuliers et de professionnels du démontage, vérifiez les références croisées et négociez directement. La plateforme ne prélève aucune commission. Vendeurs, déposez vos pièces Seat gratuitement.",
   },
 ];
 
