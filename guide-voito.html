@@ -54,6 +54,7 @@
       <a href="#webmaster">5. Webmaster Tools</a>
       <a href="#troubleshooting">6. Depannage</a>
       <a href="#files">7. Fichiers cles</a>
+      <a href="#changelog">8. Changelog</a>
     </div>
 
     <!-- ============================================ -->
@@ -61,16 +62,13 @@
     <!-- ============================================ -->
 
     <div class="alert">
-      <p><span class="badge badge-todo">TODO</span> <strong>Lancer le seed SEO des marques manquantes</strong></p>
-      <p>9 nouvelles marques ont ete ajoutees dans <code>seed-brands-seo.js</code> mais le script n'a pas encore ete execute sur la base de production.</p>
-      <pre><code># Via SSH sur Hostinger
-cd ~/domains/voito.info/public_html
-node scripts/seed-brands-seo.js</code></pre>
-    </div>
-
-    <div class="alert">
       <p><span class="badge badge-todo">TODO</span> <strong>Valider Bing Webmaster Tools</strong></p>
       <p>Le fichier <code>public/BingSiteAuth.xml</code> a ete ajoute au projet. Apres deploy, aller sur <a href="https://www.bing.com/webmasters">Bing Webmaster Tools</a> et lancer la verification.</p>
+    </div>
+
+    <div class="alert alert-success">
+      <p><span class="badge badge-done">FAIT</span> <strong>SEO marques &amp; modeles injecte en base</strong></p>
+      <p>36 marques + 33 modeles injectes en base le 20/05/2026 depuis le PC local (DB sur TiDB Cloud). Scripts : <code>seed-brands-seo.js</code>, <code>seed-models-seo-5.js</code>, <code>seed-models-seo-6.js</code>.</p>
     </div>
 
     <div class="alert alert-success">
@@ -91,7 +89,7 @@ node scripts/seed-brands-seo.js</code></pre>
         <tr><td>App root</td><td><code>~/domains/voito.info/public_html/</code></td></tr>
         <tr><td>Build mode</td><td>Next.js standalone (<code>output: "standalone"</code>)</td></tr>
         <tr><td>Entry point</td><td><code>server.js</code> (auto-genere par Next.js)</td></tr>
-        <tr><td>Base de donnees</td><td>MySQL via Prisma</td></tr>
+        <tr><td>Base de donnees</td><td>MySQL via Prisma — <strong>TiDB Cloud</strong> (distante, accessible depuis le PC local)</td></tr>
       </table>
     </div>
 
@@ -159,6 +157,14 @@ node scripts/seed-brands-seo.js</code></pre>
         <tr>
           <td><code>node scripts/seed-brands-seo.js</code></td>
           <td>Injecte le contenu SEO (h2, description, meta) pour toutes les marques</td>
+        </tr>
+        <tr>
+          <td><code>node scripts/seed-models-seo-5.js</code></td>
+          <td>SEO modeles top marques : Peugeot, Renault, Toyota, VW T-Cross (21 modeles)</td>
+        </tr>
+        <tr>
+          <td><code>node scripts/seed-models-seo-6.js</code></td>
+          <td>SEO modeles restants : Fiat, Kia, BAIC (12 modeles)</td>
         </tr>
         <tr>
           <td><code>node scripts/seed-from-json.js data/fichier.json</code></td>
@@ -246,6 +252,61 @@ node scripts/seed-brands-seo.js</code></pre>
         <tr><td><code>scripts/seed-brands-seo.js</code></td><td>Contenu SEO de 36 marques</td></tr>
         <tr><td><code>scripts/seed-from-json.js</code></td><td>Import marque + modeles depuis JSON</td></tr>
         <tr><td><code>DEPLOYMENT.md</code></td><td>Notes de deploiement</td></tr>
+      </table>
+    </div>
+
+    <!-- ============================================ -->
+    <h2 id="changelog">8. Changelog</h2>
+    <!-- ============================================ -->
+
+    <div class="card">
+      <table>
+        <tr><th>Date</th><th>Commit</th><th>Description</th></tr>
+        <tr>
+          <td class="timestamp">20/05/2026</td>
+          <td><code>f3f981b</code></td>
+          <td>Fix seed-brands-seo : upsert au lieu de update pour creer les marques PIECES manquantes</td>
+        </tr>
+        <tr>
+          <td class="timestamp">20/05/2026</td>
+          <td><code>c9153d3</code></td>
+          <td>Ajout SEO modeles : 33 modeles (Peugeot, Renault, Toyota, VW T-Cross, Fiat, Kia, BAIC) — <code>seed-models-seo-5.js</code> + <code>seed-models-seo-6.js</code></td>
+        </tr>
+        <tr>
+          <td class="timestamp">20/05/2026</td>
+          <td><code>5cdfd2b</code></td>
+          <td>Ajout SEO marques : 9 marques (6 VOITURES + 3 PIECES), BingSiteAuth.xml, Google verification, guide HTML, DEPLOYMENT.md</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>f243970</code></td>
+          <td>Fix nodemailer version to match mailtrap peer dependency</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>9f853a1</code></td>
+          <td>Remove incompatible @next/swc-wasm-nodejs, revert PORT change</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>e54834a</code></td>
+          <td>Fix 503 : use dynamic PORT from hosting environment</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>76f1153</code></td>
+          <td>Fix build errors : Suspense boundary, force-dynamic API route, nodemailer types</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>46fc19c</code></td>
+          <td>After SEO review</td>
+        </tr>
+        <tr>
+          <td class="timestamp">prev</td>
+          <td><code>bfe9549</code></td>
+          <td>Commit initial</td>
+        </tr>
       </table>
     </div>
 
