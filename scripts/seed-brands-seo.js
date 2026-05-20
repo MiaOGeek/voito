@@ -378,18 +378,30 @@ const brandsSeo = [
 
 async function main() {
   let updated = 0;
+  let created = 0;
   let errors = 0;
 
   for (const brand of brandsSeo) {
     try {
-      await prisma.brand.update({
+      await prisma.brand.upsert({
         where: {
           slug_category: {
             slug: brand.slug,
             category: brand.category,
           },
         },
-        data: {
+        update: {
+          metaTitle: brand.metaTitle,
+          metaDesc: brand.metaDesc,
+          h2Top: brand.h2Top,
+          descriptionTop: brand.descriptionTop,
+          h2Bottom: brand.h2Bottom,
+          descriptionBottom: brand.descriptionBottom,
+        },
+        create: {
+          name: brand.slug.charAt(0).toUpperCase() + brand.slug.slice(1).replace(/-./g, m => ' ' + m[1].toUpperCase()),
+          slug: brand.slug,
+          category: brand.category,
           metaTitle: brand.metaTitle,
           metaDesc: brand.metaDesc,
           h2Top: brand.h2Top,
